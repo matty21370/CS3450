@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour
 {
-    [SerializeField] private GameObject ground;
     [SerializeField] private float detectionRadius;
-    [SerializeField] private Transform centreTransform;
+    
+    private Transform _centreTransform;
     
     private PhotonView _photonView;
     private Movement _movement;
@@ -33,6 +33,7 @@ public class AIController : MonoBehaviour
     {
         _photonView = GetComponent<PhotonView>();
         _players = FindObjectsOfType<Player>();
+        _centreTransform = GameObject.Find("Centre").transform;
         _updateTimer = _aiUpdateTime;
     }
 
@@ -77,7 +78,7 @@ public class AIController : MonoBehaviour
         }
         else
         {
-            _movement.SetDestination(centreTransform.position);
+            _movement.SetDestination(_centreTransform.position);
         }
     }
 

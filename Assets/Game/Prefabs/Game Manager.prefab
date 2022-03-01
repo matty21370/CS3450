@@ -43,3 +43,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2973b8e268bc5844294bdbb7820c0e66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemySpawnDelay: 5
+  spawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  enemyPrefab: {fileID: 2332909700608823575, guid: e617c457797c0a44e80134ec2ea99e60, type: 3}
