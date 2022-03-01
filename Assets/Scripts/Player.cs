@@ -16,6 +16,9 @@ public class Player : MonoBehaviour
 
     private CinemachineVirtualCamera _camera;
     private Camera _mainCamera;
+
+    [SerializeField] private Transform shootPoint;
+    [SerializeField] private ParticleSystem shootParticle;
     
     // Start is called before the first frame update
     void Start()
@@ -50,6 +53,35 @@ public class Player : MonoBehaviour
 
         _movement.x = Input.GetAxis("Horizontal");
         _movement.z = Input.GetAxis("Vertical");
+        
+        if (Input.GetMouseButtonDown(0))
+        {
+            _photonView.RPC("Shoot", RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    private void Shoot()
+    {
+        RaycastHit shoot;
+        
+        Debug.DrawRay(shootPoint.position, transform.forward, Color.magenta);
+
+        GameObject particle = Instantiate(shootParticle, shootPoint.position, Quaternion.identity).gameObject;
+        Destroy(particle, 2f);
+        
+        if (Physics.Raycast(shootPoint.position, transform.forward, out shoot))
+        {
+            if (shoot.transform.CompareTag("Enemy"))
+            {
+                Health enemy = shoot.transform.GetComponent<Health>();
+
+                if (enemy != null)
+                {
+                    enemy.View.RPC("TakeDamage", RpcTarget.All, 20f);
+                }
+            }
+        }
     }
 
     private void FixedUpdate()

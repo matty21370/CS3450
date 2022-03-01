@@ -8,7 +8,8 @@ public class AIController : MonoBehaviour
 {
     [SerializeField] private GameObject ground;
     [SerializeField] private float detectionRadius;
-
+    [SerializeField] private Transform centreTransform;
+    
     private PhotonView _photonView;
     private Movement _movement;
     
@@ -21,7 +22,7 @@ public class AIController : MonoBehaviour
 
     private bool _hasTarget = false;
     private Vector3 _targetPosition;
-    
+
     private void Awake()
     {
         _movement = GetComponent<Movement>();
@@ -73,6 +74,10 @@ public class AIController : MonoBehaviour
         if (_hasTarget)
         {
             _movement.SetDestination(_targetPosition);
+        }
+        else
+        {
+            _movement.SetDestination(centreTransform.position);
         }
     }
 
