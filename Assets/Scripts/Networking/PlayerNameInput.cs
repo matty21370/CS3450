@@ -24,15 +24,19 @@ namespace Networking
             PhotonNetwork.NickName = defaultName;
         }
 
-        public void SetPlayerName(string name)
+        public void SetPlayerName()
         {
-            if (string.IsNullOrEmpty(name))
+            print("ff");
+            string playerName = GetComponent<InputField>().text;
+            if (string.IsNullOrEmpty(playerName))
             {
                 return;
             }
 
-            PhotonNetwork.NickName = name;
-            PlayerPrefs.SetString(PlayerNamePrefKey, name);
+            PhotonNetwork.NickName = playerName;
+            PlayerPrefs.SetString(PlayerNamePrefKey, playerName);
+            
+            print(PhotonNetwork.NickName);
         }
         
     }

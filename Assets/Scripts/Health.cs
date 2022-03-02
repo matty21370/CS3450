@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class Health : MonoBehaviour
+public class Health : MonoBehaviourPunCallbacks
 {
     [SerializeField] private float maxHealth;
     private float _currentHealth;
@@ -12,6 +12,8 @@ public class Health : MonoBehaviour
     private PhotonView _photonView;
 
     public PhotonView View => _photonView;
+
+    private Player _killer = null;
 
     private void Awake()
     {
@@ -24,20 +26,21 @@ public class Health : MonoBehaviour
         _currentHealth = maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
-    [PunRPC]
-    public void TakeDamage(float amt)
+    public void TakeDamage(float amt, Player dealer)
     {
         _currentHealth = Mathf.Max(_currentHealth - amt, 0);
 
         if (_currentHealth <= 0)
         {
-            Destroy(gameObject);
+            _killer = dealer;
+            photonView.RPC("Kill", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    private void Kill()
+    {
+        _killer.AddScore(10);
+        Destroy(gameObject);
     }
 }

@@ -82,6 +82,7 @@ MonoBehaviour:
   movementSpeed: 4
   shootPoint: {fileID: 3940476276010417351}
   shootParticle: {fileID: 3625369076958519937, guid: f15c7ec2209fad844a341e531900755c, type: 3}
+  shootCooldown: 0.2
 --- !u!114 &-5396403885826880592
 MonoBehaviour:
   m_ObjectHideFlags: 0

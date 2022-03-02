@@ -5,6 +5,7 @@ using Cinemachine;
 using Photon.Pun;
 using UnityEngine;
 
+[System.Serializable]
 public class Player : MonoBehaviour
 {
     [SerializeField] private float movementSpeed = 7;
@@ -19,6 +20,15 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Transform shootPoint;
     [SerializeField] private ParticleSystem shootParticle;
+
+    [SerializeField] private float shootCooldown;
+    private float _shootTimer;
+
+    private int _score;
+    private string _playerName;
+
+    public int Score => _score;
+    public string PlayerName => _playerName;
     
     // Start is called before the first frame update
     void Start()
@@ -34,6 +44,8 @@ public class Player : MonoBehaviour
             FindObjectOfType<CameraFollow>().Init(transform);
             _camera.Follow = FindObjectOfType<CameraFollow>().transform;
         }
+
+        _playerName = _photonView.Owner.NickName;
     }
 
     // Update is called once per frame
@@ -54,9 +66,13 @@ public class Player : MonoBehaviour
         _movement.x = Input.GetAxis("Horizontal");
         _movement.z = Input.GetAxis("Vertical");
         
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
-            _photonView.RPC("Shoot", RpcTarget.All);
+            if (Time.time >= _shootTimer)
+            {
+                _shootTimer = Time.time + shootCooldown;
+                _photonView.RPC("Shoot", RpcTarget.All);
+            }
         }
     }
 
@@ -67,7 +83,7 @@ public class Player : MonoBehaviour
         
         Debug.DrawRay(shootPoint.position, transform.forward, Color.magenta);
 
-        GameObject particle = Instantiate(shootParticle, shootPoint.position, Quaternion.identity).gameObject;
+        GameObject particle = Instantiate(shootParticle, shootPoint.position, Quaternion.Euler(90, 0, 0)).gameObject;
         Destroy(particle, 2f);
         
         if (Physics.Raycast(shootPoint.position, transform.forward, out shoot))
@@ -78,10 +94,15 @@ public class Player : MonoBehaviour
 
                 if (enemy != null)
                 {
-                    enemy.View.RPC("TakeDamage", RpcTarget.All, 20f);
+                    enemy.TakeDamage(10, this);
                 }
             }
         }
+    }
+
+    public void AddScore(int amt)
+    {
+        _score += amt;
     }
 
     private void FixedUpdate()

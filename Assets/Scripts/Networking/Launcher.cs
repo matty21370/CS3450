@@ -25,8 +25,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void Connect()
     {
-        progressLabel.SetActive(true);
-        controlPanel.SetActive(false);
+        controlPanel.GetComponent<CanvasGroup>().alpha = 0;
         
         if (PhotonNetwork.IsConnected)
         {
@@ -50,8 +49,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        progressLabel.SetActive(false);
-        controlPanel.SetActive(true);
+        controlPanel.GetComponent<CanvasGroup>().alpha = 1;
         
         Debug.Log("Disconnected from master");
     }
